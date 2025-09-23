@@ -6,7 +6,7 @@ function Home() {
     <>
       <Hero />
       <div className="container text-center mt-5">
-        <h2>Welcome to Our NGO Portal</h2>
+        <h2>Welcome to Our Sardar Kartar Singh Jhabbar Trust</h2>
         <p className="lead">
           Helping students achieve their dreams with the support of donors like you.
         </p>

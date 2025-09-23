@@ -6,7 +6,7 @@ function Footer() {
     <footer className="bg-dark text-white mt-5 py-4">
       <div className="container text-center">
         <p className="mb-2">
-          &copy; {new Date().getFullYear()} NGO Portal. All rights reserved.
+          &copy; {new Date().getFullYear()} Sardar kartar Singh Jhabbar Trust. All rights reserved.
         </p>
         <ul className="list-inline">
           <li className="list-inline-item">

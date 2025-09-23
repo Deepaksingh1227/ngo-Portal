@@ -112,7 +112,7 @@ function Contact() {
                   <FaEnvelope className="icon" />
                   <div>
                     <strong>Email</strong>
-                    <p>ceogyaansatra@gmail.com</p>
+                    <p>sardarkartarsinghjhabbartrust@gmail.com</p>
                   </div>
                 </div>
                 <div className="info-item">
@@ -126,7 +126,7 @@ function Contact() {
                   <FaMapMarkerAlt className="icon" />
                   <div>
                     <strong>Visit Us</strong>
-                    <p>Dehradun, Uttarakhand, India</p>
+                    <p>Delhi, India</p>
                   </div>
                 </div>
               </Card.Body>
@@ -136,6 +136,7 @@ function Contact() {
                 <h4 className="contact-title">Follow Us</h4>
                 <p>Connect with us on social media</p>
                 <div className="social-icons">
+
                   <a href="#" className="linkedin">
                     <FaLinkedin />
                   </a>
@@ -145,6 +146,11 @@ function Contact() {
                   <a href="#" className="youtube">
                     <FaYoutube />
                   </a>
+
+                  <a href="#" className="linkedin"><FaLinkedin /></a>
+                  <a href="https://www.instagram.com/sksjtrust?igsh=MTYzd2w5M3B3NWd0YQ%3D%3D&utm_source=qr" className="instagram"><FaInstagram /></a>
+                  <a href="#" className="youtube"><FaYoutube /></a> 
+
                 </div>
               </Card.Body>
             </Card>
