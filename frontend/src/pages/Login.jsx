@@ -1,98 +1,91 @@
 import React, { useState } from "react";
-import { loginUser } from "../services/Auth";
-import { FaEnvelope, FaLock } from "react-icons/fa"; // For icons
+import { useNavigate } from "react-router-dom";
+import API from "../services/Api";
+import ReCAPTCHA from "react-google-recaptcha";
 
 function Login() {
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) =>
-    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleCaptcha = (value) => {
+    setCaptchaToken(value);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // ✅ If not admin → must verify captcha
+   if (
+      !(formData.email === "admin@ngo.com" && formData.password === "Admin123") &&
+      !captchaToken
+    ) {
+      alert("Please verify that you are not a robot!");
+      return;
+    }
+
     try {
-      const res = await loginUser(loginData.email, loginData.password);
-      alert(`Welcome ${res.user.name}, role: ${res.user.role}`);
-      window.location.href = res.user.role === "admin" ? "/admin" : "/";
-    } catch {
-      alert("Invalid login");
+      const { data } = await API.post("/auth/login", {
+        ...formData,
+        token: captchaToken, // send captcha only if student/donor
+      });
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.user.role);
+      alert(`Welcome back, ${data.user.name}`);
+      navigate("/");
+    } catch (error) {
+      alert(error.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <div
-      className="d-flex align-items-center justify-content-center vh-100"
-      style={{
-        background: "linear-gradient(135deg, #e0f7fa 0%, #c8e6c9 100%)", // professional soft pastel gradient
-      }}
-    >
-      <div
-        className="card shadow-lg p-5"
-        style={{
-          maxWidth: "420px",
-          width: "100%",
-          borderRadius: "20px",
-          minHeight: "500px", // slightly increased height for new button
-        }}
-      >
-        <h2 className="text-center mb-5 text-primary">Login</h2>
-        <form onSubmit={handleSubmit}>
-          {/* Email Input */}
-          <div className="input-group mb-4">
-            <span className="input-group-text bg-primary text-white">
-              <FaEnvelope />
-            </span>
-            <input
-              type="email"
-              name="email"
-              className="form-control"
-              placeholder="Email"
-              onChange={handleChange}
-              required
-            />
-          </div>
+    <div className="container mt-5" style={{ maxWidth: "500px" }}>
+      <h2 className="text-center">Login</h2>
+      <form onSubmit={handleSubmit} className="p-3 border rounded bg-light">
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+          <input
+            type="email"
+            className="form-control"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        
+        {/* ✅ Show captcha only if not admin */}
+        {!(formData.email === "admin@ngo.com") && (
+          <div className="mb-3 d-flex justify-content-center">
+            <ReCAPTCHA
+              sitekey="6LeQkdIrAAAAAKnlClDBShGKWGiUSzD4_9qcS92H"
+              onChange={handleCaptcha}
+            >
+          </ReCAPTCHA></div>
+        )}
 
-          {/* Password Input */}
-          <div className="input-group mb-4">
-            <span className="input-group-text bg-primary text-white">
-              <FaLock />
-            </span>
-            <input
-              type="password"
-              name="password"
-              className="form-control"
-              placeholder="Password"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          {/* Login Button */}
-          <button
-            type="submit"
-            className="btn btn-primary w-100 mb-3"
-            style={{ padding: "12px", fontSize: "16px" }}
-          >
-            Login
-          </button>
-
-          {/* Register Button */}
-          <button
-            type="button"
-            className="btn btn-outline-primary w-100 mb-3"
-            style={{ padding: "12px", fontSize: "16px" }}
-            onClick={() => (window.location.href = "/register")}
-          >
-            Register
-          </button>
-
-          <div className="text-center">
-            <a href="/forgot-password" className="small text-primary">
-              Forgot password?
-            </a>
-          </div>
-        </form>
-      </div>
+        <button type="submit" className="btn btn-primary w-100">
+          Login
+        </button>
+      </form>
     </div>
   );
 }

@@ -1,8 +1,12 @@
 import mongoose from "mongoose";
 
 const donationSchema = new mongoose.Schema({
-  name: String,
-  amount: Number,
+  name: { type: String, required: true },
+  email: String,
+  contact: String,
+  address: String,
+  gender: String,
+  amount: { type: Number, required: true },
   message: String
 }, { timestamps: true });
 

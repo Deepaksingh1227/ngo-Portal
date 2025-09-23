@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import Register from "./pages/Register";
 import Contact from "./pages/Contact";
+import ActiveStudentsList from "./pages/ActiveStudentsList";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/register" element={<Register />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/active-students" element={<ActiveStudentsList />} />
         </Routes>
       </div>
       <Footer />

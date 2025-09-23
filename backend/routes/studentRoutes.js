@@ -7,8 +7,20 @@ const router = express.Router();
 // store uploaded files in "uploads/" folder with random names
 const upload = multer({ dest: "uploads/" });
 
-// route: POST /apply → accepts a single file with field name "file"
-router.post("/apply", upload.single("file"), applyStudent);
+
+// Multiple file fields
+router.post(
+  "/apply",
+  upload.fields([
+    { name: "aadhaar", maxCount: 1 },
+    { name: "reportCards", maxCount: 1 },
+    { name: "marksheet", maxCount: 1 },
+    { name: "granthiProof", maxCount: 1 },
+    { name: "parentAadhaar", maxCount: 1 },
+    { name: "cv", maxCount: 1 },
+  ]),
+  applyStudent
+);
 
 // route: GET /results → fetch student results
 router.get("/results", getResults);

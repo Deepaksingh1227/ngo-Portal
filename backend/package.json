@@ -17,12 +17,16 @@
   "license": "ISC",
   "description": "Backend server for NGO Portal using Express, Mongoose, and Node.js",
   "dependencies": {
+    "axios": "^1.12.2",
+    "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.1",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

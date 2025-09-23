@@ -7,7 +7,12 @@ function Apply() {
     name: "",
     email: "",
     education: "",
-    file: null,
+    aadhaar: null,
+    reportCards: null,
+    marksheet: null,
+    granthiProof: null,
+    parentAadhaar: null,
+    cv: null,
   });
 
   useEffect(() => {
@@ -19,7 +24,7 @@ function Apply() {
 
   const handleChange = (e) => {
     if (e.target.type === "file") {
-      setFormData({ ...formData, file: e.target.files[0] });
+      setFormData({ ...formData, [e.target.name]: e.target.files[0] });
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -29,10 +34,9 @@ function Apply() {
     e.preventDefault();
     try {
       const data = new FormData();
-      data.append("name", formData.name);
-      data.append("email", formData.email);
-      data.append("education", formData.education);
-      data.append("file", formData.file);
+      Object.keys(formData).forEach((key) => {
+        data.append(key, formData[key]);
+      });
 
       await API.post("/students/apply", data, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -51,7 +55,26 @@ function Apply() {
         <input type="text" name="name" placeholder="Full Name" className="form-control mb-3" onChange={handleChange} required />
         <input type="email" name="email" placeholder="Email" className="form-control mb-3" onChange={handleChange} required />
         <textarea name="education" placeholder="Educational Background" className="form-control mb-3" rows="3" onChange={handleChange}></textarea>
-        <input type="file" className="form-control mb-3" onChange={handleChange} required />
+
+        {/* File Uploads */}
+        <label>Aadhaar Card</label>
+        <input type="file" name="aadhaar" className="form-control mb-3" onChange={handleChange} required />
+
+        <label>Report Cards (Last 3 years)</label>
+        <input type="file" name="reportCards" className="form-control mb-3" onChange={handleChange} required />
+
+        <label>10th/12th Marksheet</label>
+        <input type="file" name="marksheet" className="form-control mb-3" onChange={handleChange} required />
+
+        <label>Proof Parent is Granthi</label>
+        <input type="file" name="granthiProof" className="form-control mb-3" onChange={handleChange} required />
+
+        <label>Parent Aadhaar</label>
+        <input type="file" name="parentAadhaar" className="form-control mb-3" onChange={handleChange} required />
+
+        <label>CV</label>
+        <input type="file" name="cv" className="form-control mb-3" onChange={handleChange} required />
+
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>
     </div>

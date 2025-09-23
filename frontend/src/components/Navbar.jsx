@@ -56,6 +56,13 @@ function Navbar() {
               </Link>
             </li>
 
+            {/*Activ student*/}
+             <li className="nav-item">
+              <Link className="nav-link" to="/active-students" onClick={handleLinkClick}>
+                Active Students
+              </Link>
+            </li>
+
             {/* Student links */}
             {isLoggedIn() && role === "student" && (
               <>
@@ -69,17 +76,40 @@ function Navbar() {
                     Results
                   </Link>
                 </li>
+                {/* ✅ Active Students visible for students */}
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/active-students"
+                    onClick={handleLinkClick}
+                  >
+                    Active Students
+                  </Link>
+                </li>
               </>
             )}
 
             {/* Donator links */}
             {isLoggedIn() && role === "donator" && (
-              <li className="nav-item">
-                <Link className="nav-link" to="/donate" onClick={handleLinkClick}>
-                  Donate
-                </Link>
-              </li>
+              <>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/active-students"
+                    onClick={handleLinkClick}
+                  >
+                    Active Students
+                  </Link>
+                </li>
+              </>
             )}
+
+            {/* Donate always visible */}
+            <li className="nav-item">
+              <Link className="nav-link" to="/donate" onClick={handleLinkClick}>
+                Donate
+              </Link>
+            </li>
 
             {/* Admin links */}
             {isLoggedIn() && role === "admin" && (

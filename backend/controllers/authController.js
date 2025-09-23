@@ -1,15 +1,37 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import axios from "axios";
 
 const generateToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 
-// ✅ REGISTER
+// 🔹 Helper to verify reCAPTCHA
+const verifyCaptcha = async (token) => {
+  try {
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
+    const { data } = await axios.post(url);
+    return data.success;
+  } catch (err) {
+    console.error("Captcha verification error:", err.message);
+    return false;
+  }
+};
+
+// ✅ REGISTER (captcha only for non-admin)
 export const register = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, token } = req.body;
 
   try {
+    // 🔹 Skip captcha if role is admin
+    if (role !== "admin") {
+      const captchaOk = await verifyCaptcha(token);
+      if (!captchaOk) {
+        return res.status(400).json({ message: "Captcha verification failed" });
+      }
+    }
+
     const userExists = await User.findOne({ email });
     if (userExists)
       return res.status(400).json({ message: "User already exists" });
@@ -26,7 +48,12 @@ export const register = async (req, res) => {
 
     if (user) {
       res.status(201).json({
-        user,
+        user: {
+          _id: user._id,
+          name: user.name,
+          role: user.role,
+          email: user.email,
+        },
         token: generateToken(user._id),
       });
     } else {
@@ -37,14 +64,13 @@ export const register = async (req, res) => {
   }
 };
 
-// ✅ LOGIN (with hardcoded ADMIN)
+// ✅ LOGIN (captcha only for non-admin)
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, token } = req.body;
 
   try {
-    // check for hardcoded admin
+    // 🔹 Hardcoded admin (skip captcha)
     if (email === "admin@ngo.com" && password === "Admin123") {
-      // see if admin already exists in DB
       let admin = await User.findOne({ email });
       if (!admin) {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -57,16 +83,32 @@ export const login = async (req, res) => {
       }
 
       return res.json({
-        user: admin,
+        user: {
+          _id: admin._id,
+          name: admin.name,
+          role: admin.role,
+          email: admin.email,
+        },
         token: generateToken(admin._id),
       });
     }
 
-    // regular users
+    // 🔹 For students/donors → verify captcha
+    const captchaOk = await verifyCaptcha(token);
+    if (!captchaOk) {
+      return res.status(400).json({ message: "Captcha verification failed" });
+    }
+
+    // Regular users
     const user = await User.findOne({ email });
     if (user && (await bcrypt.compare(password, user.password))) {
       return res.json({
-        user,
+        user: {
+          _id: user._id,
+          name: user.name,
+          role: user.role,
+          email: user.email,
+        },
         token: generateToken(user._id),
       });
     } else {
