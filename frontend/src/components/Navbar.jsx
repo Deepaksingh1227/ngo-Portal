@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { isLoggedIn, getUserRole, getUser, logoutUser } from "../services/Auth";
 
+
+
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -19,11 +21,17 @@ function Navbar() {
   const user = getUser();
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+   <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm ">
       <div className="container">
         {/* Brand */}
-        <Link className="navbar-brand" to="/" onClick={handleLinkClick}>
-          NGO Portal
+        <Link className="navbar-brand d-flex align-items-center fw-bold fs-5" to="/" onClick={handleLinkClick}>
+          <img
+            src="logo.jpeg"
+            alt="Logo"
+            width="45"
+            height="45"
+            className="rounded-circle border border-warning me-2 p-1 bg-white" />
+          <span className="text-light">Sardar Kartar Singh Jhabbar Trust</span>
         </Link>
 
         {/* Toggler */}

@@ -19,8 +19,8 @@ function Hero() {
           style={{ filter: "brightness(60%) blur(1px)", zIndex: -1 }}
         />
         <div className="container">
-          <h2 className="display-3 fw-bold mb-4">
-            Welcome to Sardar Kartar Singh Jhabbar
+          <h2 className="display-4 fw-bold mb-4">
+            Welcome to Sardar Kartar Singh Jhabbar Trust
           </h2>
           <p className="lead mb-5">
             Empowering change by connecting NGOs with passionate volunteers and
@@ -58,7 +58,7 @@ function Hero() {
             <div className="col-md-6 text-center mb-4 mb-md-0">
               <img
                 src="/asset/hero-bg.jpeg"
-                alt="About NGOConnect"
+                alt="About Sardar Kartar Singh Jhabbar"
                 className="img-fluid rounded shadow"
                 style={{ maxWidth: "400px" }}
               />
