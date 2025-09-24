@@ -5,9 +5,7 @@ import {
   FaPhoneAlt,
   FaMapMarkerAlt,
   FaPaperPlane,
-  FaLinkedin,
   FaInstagram,
-  FaYoutube,
 } from "react-icons/fa";
 import emailjs from "@emailjs/browser";
 
@@ -24,13 +22,12 @@ function Contact() {
   const sendEmail = (e) => {
     e.preventDefault();
 
-    // ✅ send using emailjs.send
     emailjs
       .send(
-        "service_pbzmicu", // Your EmailJS Service ID
-        "template_3rv7u4j", // Your EmailJS Template ID
+        "service_pbzmicu",
+        "template_3rv7u4j",
         formData,
-        "N4H-xoVDjgz_NcbDJ" // Your Public Key
+        "N4H-xoVDjgz_NcbDJ"
       )
       .then(
         () => {
@@ -54,6 +51,7 @@ function Contact() {
           your career with expert guidance.
         </p>
         <Row className="gy-4">
+          {/* Form Section */}
           <Col md={6}>
             <Card className="contact-card form-card shadow-sm">
               <Card.Body>
@@ -104,6 +102,7 @@ function Contact() {
             </Card>
           </Col>
 
+          {/* Info Section */}
           <Col md={6}>
             <Card className="contact-card info-card shadow-sm mb-4">
               <Card.Body>
@@ -112,7 +111,9 @@ function Contact() {
                   <FaEnvelope className="icon" />
                   <div>
                     <strong>Email</strong>
-                    <p>sardarkartarsinghjhabbartrust@gmail.com</p>
+                    <p className="break-text">
+                      sardarkartarsinghjhabbartrust@gmail.com
+                    </p>
                   </div>
                 </div>
                 <div className="info-item">
@@ -131,32 +132,162 @@ function Contact() {
                 </div>
               </Card.Body>
             </Card>
+
+            {/* Social Media */}
             <Card className="contact-card social-card shadow-sm">
               <Card.Body>
                 <h4 className="contact-title">Follow Us</h4>
                 <p>Connect with us on social media</p>
                 <div className="social-icons">
-
-                  <a href="#" className="linkedin">
-                    <FaLinkedin />
-                  </a>
-                  <a href="#" className="instagram">
+                  <a
+                    href="https://www.instagram.com/sksjtrust"
+                    className="instagram"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <FaInstagram />
                   </a>
-                  <a href="#" className="youtube">
-                    <FaYoutube />
-                  </a>
-
-                  <a href="#" className="linkedin"><FaLinkedin /></a>
-                  <a href="https://www.instagram.com/sksjtrust?igsh=MTYzd2w5M3B3NWd0YQ%3D%3D&utm_source=qr" className="instagram"><FaInstagram /></a>
-                  <a href="#" className="youtube"><FaYoutube /></a> 
-
                 </div>
               </Card.Body>
             </Card>
           </Col>
         </Row>
       </Container>
+
+      {/* Embedded CSS */}
+      <style jsx="true">{`
+        .contact-section {
+          background: #f5f7fa;
+          min-height: 100vh;
+        }
+
+        .section-title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: #004b8d;
+        }
+
+        .section-subtitle {
+          font-size: 1.1rem;
+          color: #555;
+        }
+
+        .contact-card {
+          border-radius: 15px;
+          padding: 20px;
+          background-color: #ffffff;
+          transition: all 0.3s ease-in-out;
+        }
+
+        .contact-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-card .contact-title {
+          font-size: 1.6rem;
+          font-weight: 600;
+          color: #004b8d;
+        }
+
+        .form-card .contact-subtitle {
+          font-size: 0.95rem;
+          color: #555;
+          margin-bottom: 20px;
+        }
+
+        .send-btn {
+          background: #004b8d;
+          border: none;
+          font-weight: 600;
+          padding: 10px;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+          background: #0066cc;
+          transform: translateY(-2px);
+        }
+
+        .info-card .contact-title,
+        .social-card .contact-title {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #004b8d;
+          margin-bottom: 15px;
+        }
+
+        .info-item {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: 15px;
+        }
+
+        .info-item .icon {
+          font-size: 1.5rem;
+          color: #004b8d;
+          margin-right: 15px;
+          flex-shrink: 0;
+        }
+
+        .info-item p {
+          margin: 0;
+          color: #555;
+          font-size: 0.95rem;
+        }
+
+        .break-text {
+          word-wrap: break-word;
+          word-break: break-all;
+          white-space: normal;
+        }
+
+        .social-icons a {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 45px;
+          height: 45px;
+          margin-right: 10px;
+          background-color: #004b8d;
+          color: #fff;
+          border-radius: 50%;
+          font-size: 1.2rem;
+          transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+          background-color: #0066cc;
+          transform: scale(1.1);
+        }
+
+        @media (max-width: 767px) {
+          .contact-section {
+            padding: 40px 10px;
+          }
+          .section-title {
+            font-size: 2rem;
+          }
+          .section-subtitle {
+            font-size: 1rem;
+          }
+          .contact-card {
+            padding: 15px;
+          }
+          .send-btn {
+            font-size: 0.95rem;
+          }
+          .social-icons a {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+          }
+          .break-text {
+            font-size: 0.85rem;
+          }
+        }
+      `}</style>
     </div>
   );
 }
