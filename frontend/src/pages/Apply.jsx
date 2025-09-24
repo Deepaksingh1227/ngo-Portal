@@ -8,7 +8,7 @@ function Apply() {
     email: "",
     education: "",
     aadhaar: null,
-    reportCards: null,
+    reportCard: null,
     marksheet: null,
     granthiProof: null,
     parentAadhaar: null,
@@ -60,8 +60,8 @@ function Apply() {
         <label>Aadhaar Card</label>
         <input type="file" name="aadhaar" className="form-control mb-3" onChange={handleChange} required />
 
-        <label>Report Cards (Last 3 years)</label>
-        <input type="file" name="reportCards" className="form-control mb-3" onChange={handleChange} required />
+        <label>Report Card (Last 3 years)</label>
+        <input type="file" name="reportCard" className="form-control mb-3" onChange={handleChange} required />
 
         <label>10th/12th Marksheet</label>
         <input type="file" name="marksheet" className="form-control mb-3" onChange={handleChange} required />
