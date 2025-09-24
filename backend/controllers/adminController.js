@@ -1,15 +1,15 @@
 import Student from "../models/Student.js";
 import Donation from "../models/Donation.js";
 import ActiveStudent from "../models/ActiveStudent.js";
+import Result from "../models/Result.js";
 import xlsx from "xlsx";
 
-// Get all students
+// -------------------- Students --------------------
 export const getStudents = async (req, res) => {
   const students = await Student.find();
   res.json(students);
 };
 
-// Update student status
 export const updateStudent = async (req, res) => {
   const student = await Student.findById(req.params.id);
   if (student) {
@@ -21,12 +21,12 @@ export const updateStudent = async (req, res) => {
   }
 };
 
-// ✅ Get all donors
+// -------------------- Donors --------------------
 export const getDonations = async (req, res) => {
   const donations = await Donation.find();
   res.json(donations);
 };
-// Delete donor by ID
+
 export const deleteDonation = async (req, res) => {
   try {
     const donor = await Donation.findById(req.params.id);
@@ -40,75 +40,70 @@ export const deleteDonation = async (req, res) => {
   }
 };
 
-
-// Bulk upload results from CSV/Excel
+// -------------------- Bulk Upload Results --------------------
 export const bulkUploadResults = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    // Read file
-    const workbook = xlsx.readFile(req.file.path);
+    // ✅ Read from memory buffer
+    const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const data = xlsx.utils.sheet_to_json(sheet);
 
-    // data = array of rows like [{ mobile: "98765", exam: "2025", score: 80, status: "Pass" }, ...]
-
+    // Expected: [{ mobile, exam, score, status }]
     const results = [];
     for (let row of data) {
       const { mobile, exam, score, status } = row;
-
       if (!mobile) continue;
 
-      const student = await Student.findOne({ mobile });
-      if (student) {
-        student.result = { exam, score, status };
-        await student.save();
-        results.push({ mobile, updated: true });
-      } else {
-        results.push({ mobile, updated: false, error: "Student not found" });
-      }
+      // Save directly into Result collection
+      results.push({ mobile, exam, score, status });
     }
 
-    res.json({ message: "Bulk upload finished", results });
+    await Result.insertMany(results);
+
+    res.json({ message: "Bulk upload finished", count: results.length });
   } catch (error) {
-    res.status(500).json({ message: "Bulk upload failed", error });
+    console.error("❌ Bulk upload error:", error);
+    res.status(500).json({ message: "Bulk upload failed", error: error.message });
   }
 };
 
-// controllers/adminController.js
-
-
-// Upload single active student
+// -------------------- Active Students --------------------
 export const addActiveStudent = async (req, res) => {
   try {
     const { name, rollNumber, mobile, course, year } = req.body;
-    const student = await ActiveStudent.create({ name, rollNumber, mobile, course, year });
+    const student = await ActiveStudent.create({
+      name,
+      rollNumber,
+      mobile,
+      course,
+      year,
+    });
     res.status(201).json(student);
   } catch (error) {
     res.status(500).json({ message: "Error adding active student", error });
   }
 };
 
-// Bulk upload active students (CSV/Excel)
 export const bulkUploadActiveStudents = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
-    const workbook = xlsx.readFile(req.file.path);
+    const workbook = xlsx.read(req.file.buffer, { type: "buffer" });
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const data = xlsx.utils.sheet_to_json(sheet);
 
     const students = await ActiveStudent.insertMany(data);
     res.json({ message: "Active students uploaded successfully", students });
   } catch (error) {
-    res.status(500).json({ message: "Bulk upload failed", error });
+    res.status(500).json({ message: "Bulk upload failed", error: error.message });
   }
 };
 
-//Public route to fetch active students
 export const getActiveStudents = async (req, res) => {
   try {
     const students = await ActiveStudent.find();
@@ -118,9 +113,6 @@ export const getActiveStudents = async (req, res) => {
   }
 };
 
-
-
-// Delete active student by ID (Admin only)
 export const deleteActiveStudent = async (req, res) => {
   try {
     const student = await ActiveStudent.findById(req.params.id);
@@ -133,10 +125,3 @@ export const deleteActiveStudent = async (req, res) => {
     res.status(500).json({ message: "Error deleting active student", error });
   }
 };
-
-
-
-
-
-
-

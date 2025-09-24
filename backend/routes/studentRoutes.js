@@ -1,14 +1,8 @@
 import express from "express";
-import multer from "multer";
-import { applyStudent, getResults } from "../controllers/studentController.js";
+import { applyStudent, getResults, upload } from "../controllers/studentController.js";
 
 const router = express.Router();
 
-// store uploaded files in "uploads/" folder with random names
-const upload = multer({ dest: "uploads/" });
-
-
-// Multiple file fields
 router.post(
   "/apply",
   upload.fields([
@@ -22,7 +16,6 @@ router.post(
   applyStudent
 );
 
-// route: GET /results → fetch student results
 router.get("/results", getResults);
 
 export default router;

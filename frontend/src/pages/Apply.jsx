@@ -35,15 +35,16 @@ function Apply() {
     try {
       const data = new FormData();
       Object.keys(formData).forEach((key) => {
-        data.append(key, formData[key]);
+        if (formData[key]) data.append(key, formData[key]);
       });
 
-      await API.post("/students/apply", data, {
+      const res = await API.post("/students/apply", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      alert("Application submitted successfully!");
-    } catch {
+      alert("✅ " + res.data.message);
+    } catch (err) {
+      console.error("❌ Upload error:", err.response?.data || err.message);
       alert("Error submitting application");
     }
   };
@@ -56,11 +57,14 @@ function Apply() {
         <input type="email" name="email" placeholder="Email" className="form-control mb-3" onChange={handleChange} required />
         <textarea name="education" placeholder="Educational Background" className="form-control mb-3" rows="3" onChange={handleChange}></textarea>
 
-        {/* File Uploads */}
         <label>Aadhaar Card</label>
         <input type="file" name="aadhaar" className="form-control mb-3" onChange={handleChange} required />
 
+
+        <label>Report Card</label>
+
         <label>Report Card (Last 3 years)</label>
+
         <input type="file" name="reportCard" className="form-control mb-3" onChange={handleChange} required />
 
         <label>10th/12th Marksheet</label>
