@@ -13,7 +13,7 @@ router.post(
   "/apply",
   upload.fields([
     { name: "aadhaar", maxCount: 1 },
-    { name: "reportCards", maxCount: 1 },
+    { name: "reportCard", maxCount: 1 },
     { name: "marksheet", maxCount: 1 },
     { name: "granthiProof", maxCount: 1 },
     { name: "parentAadhaar", maxCount: 1 },
