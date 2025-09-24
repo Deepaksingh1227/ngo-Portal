@@ -45,8 +45,8 @@ export const applyStudent = async (req, res) => {
       aadhaar: files.aadhaar
         ? await uploadToCloudinary(files.aadhaar[0].buffer, "aadhaar")
         : "",
-      reportCards: files.reportCards
-        ? await uploadToCloudinary(files.reportCards[0].buffer, "reportCards")
+      reportCard: files.reportCard
+        ? await uploadToCloudinary(files.reportCard[0].buffer, "reportCard")
         : "",
       marksheet: files.marksheet
         ? await uploadToCloudinary(files.marksheet[0].buffer, "marksheet")
