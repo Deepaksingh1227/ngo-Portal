@@ -60,7 +60,11 @@ function Apply() {
         <label>Aadhaar Card</label>
         <input type="file" name="aadhaar" className="form-control mb-3" onChange={handleChange} required />
 
+
         <label>Report Card</label>
+
+        <label>Report Card (Last 3 years)</label>
+
         <input type="file" name="reportCard" className="form-control mb-3" onChange={handleChange} required />
 
         <label>10th/12th Marksheet</label>
