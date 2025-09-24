@@ -7,7 +7,7 @@ const studentSchema = new mongoose.Schema(
     education: String,
     documents: {
       aadhaar: String,
-      reportCards: String,
+      reportCard: String,
       marksheet: String,
       granthiProof: String,
       parentAadhaar: String,
