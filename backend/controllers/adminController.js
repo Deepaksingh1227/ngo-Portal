@@ -53,14 +53,14 @@ export const bulkUploadResults = async (req, res) => {
     const sheet = workbook.Sheets[sheetName];
     const data = xlsx.utils.sheet_to_json(sheet);
 
-    // Expected: [{ mobile, exam, score, status }]
+    // Expected: [{ name, mobile,exam, score, status }]
     const results = [];
     for (let row of data) {
-      const { mobile, exam, score, status } = row;
+      const { name, exam, score, status } = row;
       if (!mobile) continue;
 
       // Save directly into Result collection
-      results.push({ mobile, exam, score, status });
+      results.push({ name, mobile, exam, score, status });
     }
 
     await Result.insertMany(results);

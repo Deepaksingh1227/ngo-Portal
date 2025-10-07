@@ -126,25 +126,38 @@ function Navbar() {
                 </Link>
               </li>
 
-              {isLoggedIn() && role === "student" && (
-                <>
-                  <li className="nav-item">
-                    <Link className="nav-link text-light" to="/apply" onClick={handleLinkClick}>
-                      Apply
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link text-light" to="/results" onClick={handleLinkClick}>
-                      Results
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link text-light" to="/active-students" onClick={handleLinkClick}>
-                      Active Students
-                    </Link>
-                  </li>
-                </>
-              )}
+            {/*Activ student*/}
+             <li className="nav-item">
+              <Link className="nav-link" to="/active-students" onClick={handleLinkClick}>
+                Active Students
+              </Link>
+            </li>
+
+            {/* Student links */}
+            {isLoggedIn() && role === "student" && (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/apply" onClick={handleLinkClick}>
+                    Apply
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/results" onClick={handleLinkClick}>
+                    Results
+                  </Link>
+                </li>
+                {/* ✅ Active Students visible for students */}
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to="/active-students"
+                    onClick={handleLinkClick}
+                  >
+                    Active Students
+                  </Link>
+                </li>
+              </>
+            )}
 
               {isLoggedIn() && role === "donator" && (
                 <li className="nav-item">

@@ -3,11 +3,11 @@ import cloudinary from "../config/cloudinary.js";
 import Result from "../models/Result.js";
 import multer from "multer";
 
-// ✅ multer memory storage (so we can stream to Cloudinary)
+// ✅ Multer memory storage (so we can stream to Cloudinary)
 const storage = multer.memoryStorage();
 export const upload = multer({ storage });
 
-// 🔹 helper to upload buffer to Cloudinary
+// 🔹 Helper to upload buffer to Cloudinary
 const uploadToCloudinary = (fileBuffer, filename) => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
@@ -35,7 +35,6 @@ export const applyStudent = async (req, res) => {
     console.log("📂 Files received:", Object.keys(files));
 
     const documents = {};
-
 
     if (files.aadhaar) {
       documents.aadhaar = await uploadToCloudinary(
@@ -71,27 +70,6 @@ export const applyStudent = async (req, res) => {
       documents.cv = await uploadToCloudinary(files.cv[0].buffer, "cv");
     }
 
-    const documents = {
-      aadhaar: files.aadhaar
-        ? await uploadToCloudinary(files.aadhaar[0].buffer, "aadhaar")
-        : "",
-      reportCard: files.reportCard
-        ? await uploadToCloudinary(files.reportCard[0].buffer, "reportCard")
-        : "",
-      marksheet: files.marksheet
-        ? await uploadToCloudinary(files.marksheet[0].buffer, "marksheet")
-        : "",
-      granthiProof: files.granthiProof
-        ? await uploadToCloudinary(files.granthiProof[0].buffer, "granthiProof")
-        : "",
-      parentAadhaar: files.parentAadhaar
-        ? await uploadToCloudinary(files.parentAadhaar[0].buffer, "parentAadhaar")
-        : "",
-      cv: files.cv
-        ? await uploadToCloudinary(files.cv[0].buffer, "cv")
-        : "",
-    };
-
 
     const student = await Student.create({
       name,
@@ -109,15 +87,33 @@ export const applyStudent = async (req, res) => {
   }
 };
 
-// 🔹 Get results for logged-in student
+
+
+// GET: /students/results
 export const getResults = async (req, res) => {
   try {
-    const email = req.user?.email || req.query?.email; // depends on JWT
+    const email = req.user?.email || req.query?.email; // From JWT for student
+
+    // Fetch results for this student
     const results = await Result.find({ studentEmail: email });
-    res.json(results);
+
+    // Group by student (you can skip this if it's always 1 student)
+    const groupedResults = {
+      studentName: results[0]?.studentName || "N/A",
+      email: email,
+      results: results.map(r => ({
+        exam: r.exam,
+        score: r.score,
+        status: r.status
+      }))
+    };
+
+    res.status(200).json([groupedResults]); // return as array for frontend mapping
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error fetching results", error: error.message });
+    console.error("❌ Error fetching results:", error);
+    res.status(500).json({
+      message: "Error fetching student results",
+      error: error.message,
+    });
   }
 };
