@@ -64,7 +64,10 @@ function Navbar() {
               </Link>
             </li>
 
-            
+
+          
+
+
             {/* Student links */}
             {isLoggedIn() && role === "student" && (
               <>

@@ -70,6 +70,7 @@ export const applyStudent = async (req, res) => {
       documents.cv = await uploadToCloudinary(files.cv[0].buffer, "cv");
     }
 
+
     const student = await Student.create({
       name,
       email,
