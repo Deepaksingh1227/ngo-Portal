@@ -13,7 +13,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: "https://sardarkartarsinghjhabbartrust.org", methods: ["GET", "POST", "PUT", "DELETE"], credentials: true }));
 app.use(express.json());
 
 // ✅ Correct route paths
