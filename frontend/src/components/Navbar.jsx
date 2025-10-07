@@ -64,13 +64,7 @@ function Navbar() {
               </Link>
             </li>
 
-            {/*Activ student*/}
-             <li className="nav-item">
-              <Link className="nav-link" to="/active-students" onClick={handleLinkClick}>
-                Active Students
-              </Link>
-            </li>
-
+            
             {/* Student links */}
             {isLoggedIn() && role === "student" && (
               <>

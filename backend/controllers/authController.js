@@ -1,31 +1,63 @@
+// backend/controllers/authController.js
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import axios from "axios";
 
 const generateToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+  jwt.sign({ id }, process.env.JWT_SECRET || "dev_jwt_secret", {
+    expiresIn: "30d",
+  });
 
-// 🔹 Helper to verify reCAPTCHA
+// 🔹 Helper to verify reCAPTCHA (robust, logs response)
 const verifyCaptcha = async (token) => {
   try {
+    if (!token) {
+      console.warn("verifyCaptcha called without token");
+      return false;
+    }
+
     const secretKey = process.env.RECAPTCHA_SECRET_KEY;
-    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
-    const { data } = await axios.post(url);
-    return data.success;
+    if (!secretKey) {
+      console.error("RECAPTCHA_SECRET_KEY is not set in environment");
+      return false;
+    }
+
+    const url = "https://www.google.com/recaptcha/api/siteverify";
+
+    // Use URL-encoded body (the standard expected by Google)
+    const params = new URLSearchParams();
+    params.append("secret", secretKey);
+    params.append("response", token);
+
+    const { data } = await axios.post(url, params.toString(), {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      timeout: 5000,
+    });
+
+    // Helpful debug log (remove or reduce in production)
+    console.log("reCAPTCHA response:", data);
+
+    // Google returns { success: true/false, 'error-codes': [...] }
+    return data && data.success === true;
   } catch (err) {
-    console.error("Captcha verification error:", err.message);
+    console.error("Captcha verification error:", err?.response?.data || err.message);
     return false;
   }
 };
 
 // ✅ REGISTER (captcha only for non-admin)
 export const register = async (req, res) => {
-  const { name, email, password, role, token } = req.body;
-
   try {
-    // 🔹 Skip captcha if role is admin
+    const { name, email, password, role } = req.body;
+    // Accept token from several possible places
+    const token = req.body.token || req.body.captchaToken || req.headers["x-captcha-token"];
+
+    // For non-admin roles, ensure token exists and verifies
     if (role !== "admin") {
+      if (!token) {
+        return res.status(400).json({ message: "Captcha token missing" });
+      }
       const captchaOk = await verifyCaptcha(token);
       if (!captchaOk) {
         return res.status(400).json({ message: "Captcha verification failed" });
@@ -33,8 +65,9 @@ export const register = async (req, res) => {
     }
 
     const userExists = await User.findOne({ email });
-    if (userExists)
+    if (userExists) {
       return res.status(400).json({ message: "User already exists" });
+    }
 
     // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -47,7 +80,7 @@ export const register = async (req, res) => {
     });
 
     if (user) {
-      res.status(201).json({
+      return res.status(201).json({
         user: {
           _id: user._id,
           name: user.name,
@@ -57,19 +90,21 @@ export const register = async (req, res) => {
         token: generateToken(user._id),
       });
     } else {
-      res.status(400).json({ message: "Invalid user data" });
+      return res.status(400).json({ message: "Invalid user data" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Registration failed", error });
+    console.error("Registration failed:", error);
+    return res.status(500).json({ message: "Registration failed", error: error.message });
   }
 };
 
 // ✅ LOGIN (captcha only for non-admin)
 export const login = async (req, res) => {
-  const { email, password, token } = req.body;
-
   try {
-    // 🔹 Hardcoded admin (skip captcha)
+    const { email, password } = req.body;
+    const token = req.body.token || req.body.captchaToken || req.headers["x-captcha-token"];
+
+    // Hardcoded admin (skip captcha)
     if (email === "admin@ngo.com" && password === "Admin123") {
       let admin = await User.findOne({ email });
       if (!admin) {
@@ -93,7 +128,10 @@ export const login = async (req, res) => {
       });
     }
 
-    // 🔹 For students/donors → verify captcha
+    // For non-admin users, require captcha token and verify it
+    if (!token) {
+      return res.status(400).json({ message: "Captcha token missing" });
+    }
     const captchaOk = await verifyCaptcha(token);
     if (!captchaOk) {
       return res.status(400).json({ message: "Captcha verification failed" });
@@ -115,6 +153,7 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Login failed", error });
+    console.error("Login failed:", error);
+    return res.status(500).json({ message: "Login failed", error: error.message });
   }
 };

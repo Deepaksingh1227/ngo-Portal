@@ -10,39 +10,38 @@ function Register() {
     role: "student",
   });
 
-  const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState(null);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  // ✅ store actual CAPTCHA token value (not boolean)
   const handleCaptcha = (value) => {
-    if (value) {
-      setCaptchaVerified(true);
-    } else {
-      setCaptchaVerified(false);
-    }
+    setCaptchaToken(value);
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!captchaVerified) {
-    alert("Please verify that you are not a robot!");
-    return;
-  }
-  try {
-    const { data } = await API.post("/auth/register", {
-      ...formData,
-      token: captchaVerified, // ✅ send reCAPTCHA token to backend
-    });
-    alert(`User registered: ${data.user.name}`);
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("role", data.user.role);
-    window.location.href = "/";
-  } catch (error) {
-    alert(error.response?.data?.message || "Registration failed");
-  }
-};
+    e.preventDefault();
 
+    if (!captchaToken && formData.role !== "admin") {
+      alert("Please verify that you are not a robot!");
+      return;
+    }
+
+    try {
+      const { data } = await API.post("/auth/register", {
+        ...formData,
+        token: captchaToken, // ✅ send real token to backend
+      });
+
+      alert(`User registered: ${data.user.name}`);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.user.role);
+      window.location.href = "/";
+    } catch (error) {
+      alert(error.response?.data?.message || "Registration failed");
+    }
+  };
 
   return (
     <div className="container mt-5" style={{ maxWidth: "500px" }}>
@@ -58,6 +57,7 @@ function Register() {
             required
           />
         </div>
+
         <div className="mb-3">
           <label className="form-label">Email</label>
           <input
@@ -68,6 +68,7 @@ function Register() {
             required
           />
         </div>
+
         <div className="mb-3">
           <label className="form-label">Password</label>
           <input
@@ -78,6 +79,7 @@ function Register() {
             required
           />
         </div>
+
         <div className="mb-3">
           <label className="form-label">Role</label>
           <select
@@ -92,17 +94,19 @@ function Register() {
         </div>
 
         {/* ✅ reCAPTCHA */}
-        <div className="mb-3 d-flex justify-content-center">
-          <ReCAPTCHA
-            sitekey="6LeQkdIrAAAAAKnlClDBShGKWGiUSzD4_9qcS92H"   // replace with your site key
-            onChange={handleCaptcha}
-          />
-        </div>
+        {formData.role !== "admin" && (
+          <div className="mb-3 d-flex justify-content-center">
+            <ReCAPTCHA
+              sitekey="6LeQkdIrAAAAAKnlClDBShGKWGiUSzD4_9qcS92H"
+              onChange={handleCaptcha}
+            />
+          </div>
+        )}
 
         <button
           type="submit"
           className="btn btn-primary w-100"
-          disabled={!captchaVerified}
+          disabled={!captchaToken && formData.role !== "admin"}
         >
           Register
         </button>
