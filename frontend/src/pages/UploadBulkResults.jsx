@@ -10,8 +10,20 @@ function UploadBulkResults() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!file) {
-      alert("Please select a file");
+      alert("Please select a CSV or Excel file");
+      return;
+    }
+
+    const allowedTypes = [
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "text/csv",
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      alert("Invalid file type. Please upload CSV or Excel file.");
       return;
     }
 
@@ -22,9 +34,10 @@ function UploadBulkResults() {
       await API.post("/admin/results/bulk", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      alert("Bulk results uploaded successfully");
+      alert("Bulk results uploaded successfully!");
       setFile(null);
-    } catch {
+    } catch (error) {
+      console.error(error);
       alert("Error uploading bulk results");
     }
   };
@@ -44,7 +57,7 @@ function UploadBulkResults() {
         </button>
       </form>
       <p className="mt-2 text-muted">
-        File must contain columns: <b>mobile, exam, score, status</b>
+        File must contain columns: <b>name, email, exam, score, status</b>
       </p>
     </div>
   );

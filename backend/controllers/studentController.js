@@ -87,15 +87,33 @@ export const applyStudent = async (req, res) => {
   }
 };
 
-// 🔹 Get results for logged-in student
+
+
+// GET: /students/results
 export const getResults = async (req, res) => {
   try {
-    const email = req.user?.email || req.query?.email; // depends on JWT
+    const email = req.user?.email || req.query?.email; // From JWT for student
+
+    // Fetch results for this student
     const results = await Result.find({ studentEmail: email });
-    res.json(results);
+
+    // Group by student (you can skip this if it's always 1 student)
+    const groupedResults = {
+      studentName: results[0]?.studentName || "N/A",
+      email: email,
+      results: results.map(r => ({
+        exam: r.exam,
+        score: r.score,
+        status: r.status
+      }))
+    };
+
+    res.status(200).json([groupedResults]); // return as array for frontend mapping
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error fetching results", error: error.message });
+    console.error("❌ Error fetching results:", error);
+    res.status(500).json({
+      message: "Error fetching student results",
+      error: error.message,
+    });
   }
 };
