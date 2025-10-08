@@ -89,7 +89,6 @@ function Register() {
             value={formData.role}
           >
             <option value="student">Student</option>
-            <option value="donator">Donator</option>
           </select>
         </div>
 

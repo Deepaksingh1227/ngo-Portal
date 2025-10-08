@@ -31,27 +31,37 @@ function Navbar() {
           font-family: "Poppins", sans-serif;
           letter-spacing: 0.5px;
         }
-        .nav-link {
-          position: relative;
-          font-weight: 500;
-          transition: color 0.3s ease-in-out;
-        }
-        .nav-link::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          bottom: -4px;
-          width: 0%;
-          height: 2px;
-          background: #f1c40f;
-          transition: width 0.3s ease-in-out;
-        }
-        .nav-link:hover {
-          color: #f1c40f !important;
-        }
-        .nav-link:hover::after {
-          width: 100%;
-        }
+.nav-link {
+  position: relative;
+  font-weight: 500;
+  color: #ffffff !important; /* always white */
+  transition: color 0.3s ease-in-out;
+}
+.nav-link:hover {
+  color: #f1c40f !important; /* gold on hover */
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #f1c40f;
+  transition: width 0.3s ease-in-out;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+  .logout-link {
+  cursor: pointer;
+  color: #ffffff !important;
+}
+.logout-link:hover {
+  color: #f1c40f !important;
+}
+
+
 
         /* ✅ Mobile tweaks */
         @media (max-width: 768px) {
@@ -126,53 +136,35 @@ function Navbar() {
                 </Link>
               </li>
 
-            {/*Activ student*/}
-             <li className="nav-item">
-              <Link className="nav-link" to="/active-students" onClick={handleLinkClick}>
-                Active Students
-              </Link>
-            </li>
 
-            {/* Student links */}
-            {isLoggedIn() && role === "student" && (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/apply" onClick={handleLinkClick}>
-                    Apply
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/results" onClick={handleLinkClick}>
-                    Results
-                  </Link>
-                </li>
-                {/* ✅ Active Students visible for students */}
-                <li className="nav-item">
-                  <Link
-                    className="nav-link"
-                    to="/active-students"
-                    onClick={handleLinkClick}
-                  >
-                    Active Students
-                  </Link>
-                </li>
-              </>
-            )}
 
-            {/* Donator links */}
-            {isLoggedIn() && role === "donator" && (
-              <>
-                <li className="nav-item">
-                  <Link
-                    className="nav-link"
-                    to="/active-students"
-                    onClick={handleLinkClick}
-                  >
-                    Active Students
-                  </Link>
-                </li>
-              </>
-            )}
+              {/* Student links */}
+              {isLoggedIn() && role === "student" && (
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/apply" onClick={handleLinkClick}>
+                      Apply
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/results" onClick={handleLinkClick}>
+                      Results
+                    </Link>
+                  </li>
+                  {/* ✅ Active Students visible for students */}
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      to="/active-students"
+                      onClick={handleLinkClick}
+                    >
+                      Active Students
+                    </Link>
+                  </li>
+                </>
+              )}
+
+
 
               <li className="nav-item">
                 <Link className="nav-link text-light" to="/donate" onClick={handleLinkClick}>
@@ -203,13 +195,15 @@ function Navbar() {
                 </>
               ) : (
                 <li className="nav-item">
-                  <button
-                    className="btn btn-link nav-link text-warning"
+                  <Link
+                    to="#"
                     onClick={handleLogout}
+                    className="nav-link text-light logout-link"
                   >
                     Logout {user?.name ? `(${user.name})` : ""}
-                  </button>
+                  </Link>
                 </li>
+
               )}
 
               <li className="nav-item">
