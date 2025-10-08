@@ -19,6 +19,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173", // React dev server
   "https://ngo-portal-8.onrender.com", // production
+  "https://sardarkartarsinghjhabbartrust.org",
 ];
 
 app.use(
