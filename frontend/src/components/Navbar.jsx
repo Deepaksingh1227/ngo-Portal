@@ -159,13 +159,20 @@ function Navbar() {
               </>
             )}
 
-              {isLoggedIn() && role === "donator" && (
+            {/* Donator links */}
+            {isLoggedIn() && role === "donator" && (
+              <>
                 <li className="nav-item">
-                  <Link className="nav-link text-light" to="/active-students" onClick={handleLinkClick}>
+                  <Link
+                    className="nav-link"
+                    to="/active-students"
+                    onClick={handleLinkClick}
+                  >
                     Active Students
                   </Link>
                 </li>
-              )}
+              </>
+            )}
 
               <li className="nav-item">
                 <Link className="nav-link text-light" to="/donate" onClick={handleLinkClick}>

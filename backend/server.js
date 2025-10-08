@@ -18,7 +18,7 @@ const app = express();
 // ✅ CORS Setup
 const allowedOrigins = [
   "http://localhost:5173", // React dev server
-  "https://sardarkartarsinghjhabbartrust.org", // production
+  "https://ngo-portal-8.onrender.com", // production
 ];
 
 app.use(
