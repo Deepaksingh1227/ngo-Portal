@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 
 const resultSchema = new mongoose.Schema(
   {
-    name: String,
-    mobile: { type: String, required: true }, // ✅ Use mobile
+    name: String, 
     exam: String,
     score: String,
     status: String,

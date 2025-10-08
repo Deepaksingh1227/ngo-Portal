@@ -57,10 +57,10 @@ export const bulkUploadResults = async (req, res) => {
     const results = [];
     for (let row of data) {
       const { name, exam, score, status } = row;
-      if (!mobile) continue;
+      if (!name || !exam || !score) continue;
 
       // Save directly into Result collection
-      results.push({ name, mobile, exam, score, status });
+      results.push({ name, exam, score, status });
     }
 
     await Result.insertMany(results);
