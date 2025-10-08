@@ -94,20 +94,7 @@ function Navbar() {
               </>
             )}
 
-            {/* Donator links */}
-            {isLoggedIn() && role === "donator" && (
-              <>
-                <li className="nav-item">
-                  <Link
-                    className="nav-link"
-                    to="/active-students"
-                    onClick={handleLinkClick}
-                  >
-                    Active Students
-                  </Link>
-                </li>
-              </>
-            )}
+           
 
             {/* Donate always visible */}
             <li className="nav-item">
