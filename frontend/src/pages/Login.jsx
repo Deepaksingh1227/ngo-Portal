@@ -76,7 +76,7 @@ function Login() {
         {!(formData.email === "admin@ngo.com") && (
           <div className="mb-3 d-flex justify-content-center">
             <ReCAPTCHA
-              sitekey="6LeQkdIrAAAAAKnlClDBShGKWGiUSzD4_9qcS92H"
+              sitekey="6LelYUcsAAAAAAGW5z2jGGJrowxhpE_DOoD3phMZ"
               onChange={handleCaptcha}
             >
           </ReCAPTCHA></div>
