@@ -96,7 +96,7 @@ function Register() {
         {formData.role !== "admin" && (
           <div className="mb-3 d-flex justify-content-center">
             <ReCAPTCHA
-              sitekey="6LdljUksAAAAAF8M-LShR6ZtYj27U4qXepdfOXRK"
+              sitekey="6Lfgj0ksAAAAAJ4mGykeKyUX3mccL1T8O12j8Beg"
               onChange={handleCaptcha}
             />
           </div>
