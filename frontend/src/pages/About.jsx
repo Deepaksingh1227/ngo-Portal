@@ -15,6 +15,19 @@ function About() {
               style={{ maxWidth: "400px" }}
             />
           </div>
+    <section id="about" className="py-5 bg-white">
+      <div className="container">
+        <div className="row align-items-center">
+          
+          {/* Image */}
+          <div className="col-md-6 text-center mb-4 mb-md-0">
+            <img
+              src="/asset/hero-bg.jpeg"
+              alt="Sardar Kartar Singh Jhabbar Trust"
+              className="img-fluid rounded shadow"
+              style={{ maxWidth: "400px" }}
+            />
+          </div>
 
           {/* Text */}
           <div className="col-md-6">
