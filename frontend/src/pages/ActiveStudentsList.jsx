@@ -26,12 +26,12 @@ function ActiveStudentsList() {
         <table className="table table-bordered table-striped align-middle text-center active-students-table">
           <thead className="table-dark">
             <tr>
-              <th>#</th>
+              <th>Sno</th>
               <th>Name</th>
-              <th>Roll Number</th>
+              <th>Father Name</th>
               <th>Mobile</th>
-              <th>Course</th>
-              <th>Year</th>
+              <th>class</th>
+              <th>school</th>
             </tr>
           </thead>
           <tbody>
@@ -39,10 +39,10 @@ function ActiveStudentsList() {
               <tr key={s._id}>
                 <td>{i + 1}</td>
                 <td>{s.name}</td>
-                <td>{s.rollNumber}</td>
+                <td>{s.fathername}</td>
                 <td>{s.mobile}</td>
-                <td>{s.course}</td>
-                <td>{s.year}</td>
+                <td>{s.class}</td>
+                <td>{s.school}</td>
               </tr>
             ))}
           </tbody>
