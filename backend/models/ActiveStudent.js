@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 
 const activeStudentSchema = new mongoose.Schema({
   name: String,
-  rollNumber: String,
+  fathername: String,
   mobile: String,
-  course: String,
-  year: String,
+  class: String,
+  school: String,
 }, { timestamps: true });
 
 export default mongoose.model("ActiveStudent", activeStudentSchema);
