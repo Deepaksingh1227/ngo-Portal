@@ -75,13 +75,13 @@ export const bulkUploadResults = async (req, res) => {
 // -------------------- Active Students --------------------
 export const addActiveStudent = async (req, res) => {
   try {
-    const { name, rollNumber, mobile, course, year } = req.body;
+    const { name, fathername, mobile, class: studentClass, school } = req.body;
     const student = await ActiveStudent.create({
       name,
-      rollNumber,
+      fathername,
       mobile,
-      course,
-      year,
+      class: studentClass,
+      school,
     });
     res.status(201).json(student);
   } catch (error) {
@@ -97,19 +97,21 @@ export const bulkUploadActiveStudents = async (req, res) => {
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const data = xlsx.utils.sheet_to_json(sheet);
 
-    const students = await ActiveStudent.insertMany(data);
-    res.json({ message: "Active students uploaded successfully", students });
+    // Map Excel columns to schema fields
+    const students = data
+      .filter((row) => row.name) // skip empty rows
+      .map((row) => ({
+        name: row.name || "",
+        fathername: row.fathername || "",
+        mobile: String(row.mobile || ""),
+        class: String(row.class || ""),
+        school: row.school || "",
+      }));
+
+    await ActiveStudent.insertMany(students);
+    res.json({ message: "Active students uploaded successfully", count: students.length });
   } catch (error) {
     res.status(500).json({ message: "Bulk upload failed", error: error.message });
-  }
-};
-
-export const getActiveStudents = async (req, res) => {
-  try {
-    const students = await ActiveStudent.find();
-    res.json(students);
-  } catch (error) {
-    res.status(500).json({ message: "Error fetching active students", error });
   }
 };
 
