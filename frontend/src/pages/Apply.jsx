@@ -60,24 +60,14 @@ function Apply() {
         <label>Aadhaar Card</label>
         <input type="file" name="aadhaar" className="form-control mb-3" onChange={handleChange} required />
 
-
-        <label>Report Card</label>
-
         <label>Report Card (Last 3 years)</label>
-
         <input type="file" name="reportCard" className="form-control mb-3" onChange={handleChange} required />
-
-        <label>10th/12th Marksheet</label>
-        <input type="file" name="marksheet" className="form-control mb-3" onChange={handleChange} required />
 
         <label>Proof Parent is Granthi</label>
         <input type="file" name="granthiProof" className="form-control mb-3" onChange={handleChange} required />
 
         <label>Parent Aadhaar</label>
         <input type="file" name="parentAadhaar" className="form-control mb-3" onChange={handleChange} required />
-
-        <label>CV</label>
-        <input type="file" name="cv" className="form-control mb-3" onChange={handleChange} required />
 
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>

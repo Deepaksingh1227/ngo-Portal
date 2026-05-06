@@ -8,10 +8,8 @@ const studentSchema = new mongoose.Schema(
     documents: {
       aadhaar: String,
       reportCard: String,
-      marksheet: String,
       granthiProof: String,
       parentAadhaar: String,
-      cv: String,
     },
     status: { type: String, default: "Pending" },
   },

@@ -48,12 +48,6 @@ export const applyStudent = async (req, res) => {
         "reportCard"
       );
     }
-    if (files.marksheet) {
-      documents.marksheet = await uploadToCloudinary(
-        files.marksheet[0].buffer,
-        "marksheet"
-      );
-    }
     if (files.granthiProof) {
       documents.granthiProof = await uploadToCloudinary(
         files.granthiProof[0].buffer,
@@ -65,9 +59,6 @@ export const applyStudent = async (req, res) => {
         files.parentAadhaar[0].buffer,
         "parentAadhaar"
       );
-    }
-    if (files.cv) {
-      documents.cv = await uploadToCloudinary(files.cv[0].buffer, "cv");
     }
 
 

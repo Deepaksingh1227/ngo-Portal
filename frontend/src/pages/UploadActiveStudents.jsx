@@ -3,11 +3,11 @@ import API from "../services/Api";
 
 function UploadActiveStudents() {
   const [form, setForm] = useState({
-    name: "",
-    rollNumber: "",
+     name: "",
+    fathername: "",
     mobile: "",
-    course: "",
-    year: "",
+    class: "",
+    school: "",
   });
   const [file, setFile] = useState(null);
   const [students, setStudents] = useState([]);
@@ -85,11 +85,11 @@ function UploadActiveStudents() {
             className="form-control mb-2"
             required
           />
-          <input
+       <input
             type="text"
-            name="rollNumber"
-            placeholder="Roll Number"
-            value={form.rollNumber}
+            name="fathername"
+            placeholder="Father's Name"
+            value={form.fathername}
             onChange={handleChange}
             className="form-control mb-2"
             required
@@ -105,17 +105,17 @@ function UploadActiveStudents() {
           />
           <input
             type="text"
-            name="course"
-            placeholder="Course"
-            value={form.course}
+            name="class"
+            placeholder="Class (e.g. 10th, 12th)"
+            value={form.class}
             onChange={handleChange}
             className="form-control mb-2"
           />
           <input
             type="text"
-            name="year"
-            placeholder="Year"
-            value={form.year}
+            name="school"
+            placeholder="School Name"
+            value={form.school}
             onChange={handleChange}
             className="form-control mb-2"
           />
@@ -139,7 +139,8 @@ function UploadActiveStudents() {
           </button>
         </form>
         <p className="text-muted mt-2">
-          File must contain: <b>name, rollNumber, mobile, course, year</b>
+          ✅ Excel/CSV must have these exact column headers:{" "}
+          <b>name, fathername, mobile, class, school</b>
         </p>
       </div>
 
@@ -147,26 +148,26 @@ function UploadActiveStudents() {
         <h5>Active Students List</h5>
         <table className="table table-bordered">
           <thead className="table-dark">
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Roll Number</th>
-              <th>Mobile</th>
-              <th>Course</th>
-              <th>Year</th>
-              <th>Action</th>
-            </tr>
+           <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Father Name</th>
+                <th>Mobile</th>
+                <th>Class</th>
+                <th>School</th>
+                <th>Action</th>
+              </tr>
           </thead>
           <tbody>
             {students.map((s, i) => (
-              <tr key={s._id}>
-                <td>{i + 1}</td>
-                <td>{s.name}</td>
-                <td>{s.rollNumber}</td>
-                <td>{s.mobile}</td>
-                <td>{s.course}</td>
-                <td>{s.year}</td>
-                <td>
+                <tr key={s._id}>
+                  <td>{i + 1}</td>
+                  <td>{s.name}</td>
+                  <td>{s.fathername}</td>
+                  <td>{s.mobile}</td>
+                  <td>{s.class}</td>
+                  <td>{s.school}</td>
+                  <td>
                   <button
                     className="btn btn-danger btn-sm"
                     onClick={() => deleteActiveStudent(s._id)}

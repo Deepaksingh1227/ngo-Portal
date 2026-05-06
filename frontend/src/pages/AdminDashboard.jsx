@@ -125,11 +125,6 @@ function AdminDashboard() {
                         Report Card
                       </a>
                     )}{" | "}
-                    {s.documents?.marksheet && (
-                      <a href={s.documents.marksheet} target="_blank" rel="noopener noreferrer">
-                        Marksheet
-                      </a>
-                    )}{" | "}
                     {s.documents?.granthiProof && (
                       <a href={s.documents.granthiProof} target="_blank" rel="noopener noreferrer">
                         Granthi Proof
@@ -138,11 +133,6 @@ function AdminDashboard() {
                     {s.documents?.parentAadhaar && (
                       <a href={s.documents.parentAadhaar} target="_blank" rel="noopener noreferrer">
                         Parent Aadhaar
-                      </a>
-                    )}{" | "}
-                    {s.documents?.cv && (
-                      <a href={s.documents.cv} target="_blank" rel="noopener noreferrer">
-                        CV
                       </a>
                     )}
                   </td>
