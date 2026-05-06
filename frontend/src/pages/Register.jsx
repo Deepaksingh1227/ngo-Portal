@@ -11,6 +11,14 @@ function Register() {
   });
 
   const [captchaToken, setCaptchaToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      easing: "ease-out-cubic",
+      once: true,
+    });
+  }, []);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,6 +35,7 @@ function Register() {
       alert("Please verify that you are not a robot!");
       return;
     }
+    setIsLoading(true);
 
     try {
       const { data } = await API.post("/auth/register", {
@@ -35,8 +44,8 @@ function Register() {
       });
 
       alert(`User registered: ${data.user.name}`);
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.user.role);
+      sessionStorage.setItem("token", data.token);
+      sessionStorage.setItem("role", data.user.role);
       window.location.href = "/";
     } catch (error) {
       alert(error.response?.data?.message || "Registration failed");

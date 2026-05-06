@@ -36,8 +36,8 @@ function Login() {
         token: captchaToken, // send captcha only if student/donor
       });
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.user.role);
+      sessionStorage.setItem("token", data.token);
+      sessionStorage.setItem("role", data.user.role);
       alert(`Welcome back, ${data.user.name}`);
       navigate("/");
     } catch (error) {
@@ -91,3 +91,4 @@ function Login() {
 }
 
 export default Login;
+

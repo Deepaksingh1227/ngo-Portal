@@ -3,40 +3,40 @@ import API from "./Api";  // make sure file is named api.js (lowercase)
 // 🔑 Login
 export const loginUser = async (email, password) => {
   const { data } = await API.post("/auth/login", { email, password });
-  localStorage.setItem("token", data.token);
-  localStorage.setItem("role", data.user.role);
-  localStorage.setItem("user", JSON.stringify(data.user));
+  sessionStorage.setItem("token", data.token);
+  sessionStorage.setItem("role", data.user.role);
+  sessionStorage.setItem("user", JSON.stringify(data.user));
   return data;
 };
 
 // 📝 Register (Student / Donator)
 export const registerUser = async (name, email, password, role = "student") => {
   const { data } = await API.post("/auth/register", { name, email, password, role });
-  localStorage.setItem("token", data.token);
-  localStorage.setItem("role", data.user.role);
-  localStorage.setItem("user", JSON.stringify(data.user));
+  sessionStorage.setItem("token", data.token);
+  sessionStorage.setItem("role", data.user.role);
+  sessionStorage.setItem("user", JSON.stringify(data.user));
   return data;
 };
 
 // 🚪 Logout
 export const logoutUser = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("role");
-  localStorage.removeItem("user");
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("role");
+  sessionStorage.removeItem("user");
 };
 
 // 🔍 Check login status
 export const isLoggedIn = () => {
-  return !!localStorage.getItem("token");
+  return !!sessionStorage.getItem("token");
 };
 
 // 🎭 Get current role
 export const getUserRole = () => {
-  return localStorage.getItem("role");
+  return sessionStorage.getItem("role");
 };
 
 // 👤 Get current user info
 export const getUser = () => {
-  const user = localStorage.getItem("user");
+  const user = sessionStorage.getItem("user");
   return user ? JSON.parse(user) : null;
 };
