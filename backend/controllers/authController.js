@@ -36,6 +36,17 @@ export const register = async (req, res) => {
     if (userExists)
       return res.status(400).json({ message: "User already exists" });
 
+    // Password validation
+    if (!password || password.length < 8) {
+      return res.status(400).json({ message: "Password must be at least 8 characters long" });
+    }
+    if (!/^[A-Z]/.test(password)) {
+      return res.status(400).json({ message: "Password must start with a capital letter" });
+    }
+    if (!/@/.test(password)) {
+      return res.status(400).json({ message: "Password must contain an '@' symbol" });
+    }
+
     const user = await User.create({
       name,
       email,

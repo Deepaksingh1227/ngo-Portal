@@ -47,6 +47,8 @@ function Donate() {
           placeholder="Full Name"
           className="form-control mb-3"
           onChange={handleChange}
+          pattern="[A-Za-z ]+"
+          title="Name should contain only alphabets"
           required
         />
 
@@ -67,6 +69,8 @@ function Donate() {
           placeholder="Contact Number"
           className="form-control mb-3"
           onChange={handleChange}
+          pattern="[0-9]{10,15}"
+          title="Phone number must be between 10 and 15 digits"
           required
         />
 

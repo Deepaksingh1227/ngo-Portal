@@ -66,6 +66,8 @@ function Register() {
             className="form-control"
             name="name"
             onChange={handleChange}
+            pattern="[A-Za-z ]+"
+            title="Name should contain only alphabets"
             required
           />
         </div>
@@ -88,6 +90,8 @@ function Register() {
             className="form-control"
             name="password"
             onChange={handleChange}
+            pattern="^(?=.*@)[A-Z].{7,}$"
+            title="Password must be at least 8 characters, start with a capital letter, and include @"
             required
           />
         </div>
