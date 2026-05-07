@@ -36,13 +36,10 @@ export const register = async (req, res) => {
     if (userExists)
       return res.status(400).json({ message: "User already exists" });
 
-    // hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password, // Password will be hashed by User model's pre-save hook
       role,
     });
 
@@ -73,11 +70,10 @@ export const login = async (req, res) => {
     if (email === "admin@ngo.com" && password === "Admin123") {
       let admin = await User.findOne({ email });
       if (!admin) {
-        const hashedPassword = await bcrypt.hash(password, 10);
         admin = await User.create({
           name: "Admin",
           email,
-          password: hashedPassword,
+          password, // Password will be hashed by User model's pre-save hook
           role: "admin",
         });
       }

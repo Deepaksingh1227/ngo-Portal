@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import API from "../services/Api";
 import ReCAPTCHA from "react-google-recaptcha";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 
 function Register() {
   const [formData, setFormData] = useState({
