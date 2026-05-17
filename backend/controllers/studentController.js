@@ -13,7 +13,16 @@ const uploadToCloudinary = (file, prefix) => {
     // Preserve original extension and add a timestamp to prevent overwrites
     const originalName = file.originalname || "";
     const extIndex = originalName.lastIndexOf(".");
-    const ext = extIndex !== -1 ? originalName.substring(extIndex) : "";
+    let ext = extIndex !== -1 ? originalName.substring(extIndex) : "";
+    
+    // Fallback to mimetype if extension is missing
+    if (!ext && file.mimetype) {
+      if (file.mimetype === "application/pdf") ext = ".pdf";
+      else if (file.mimetype === "image/jpeg") ext = ".jpg";
+      else if (file.mimetype === "image/png") ext = ".png";
+      else if (file.mimetype.startsWith("image/")) ext = ".jpg"; // fallback
+    }
+
     const uniqueFilename = `${prefix}_${Date.now()}${ext}`;
 
     const stream = cloudinary.uploader.upload_stream(
