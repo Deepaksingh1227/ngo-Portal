@@ -14,7 +14,7 @@ const uploadToCloudinary = (file, prefix) => {
     const originalName = file.originalname || "";
     const extIndex = originalName.lastIndexOf(".");
     let ext = extIndex !== -1 ? originalName.substring(extIndex) : "";
-    
+
     // Fallback to mimetype if extension is missing
     if (!ext && file.mimetype) {
       if (file.mimetype === "application/pdf") ext = ".pdf";
@@ -26,10 +26,10 @@ const uploadToCloudinary = (file, prefix) => {
     const uniqueFilename = `${prefix}_${Date.now()}${ext}`;
 
     const stream = cloudinary.uploader.upload_stream(
-      { 
-        folder: "students", 
+      {
+        folder: "students",
         resource_type: "raw", // "raw" allows PDFs to be accessed properly without Cloudinary image transformations blocking them
-        public_id: uniqueFilename 
+        public_id: uniqueFilename
       },
       (error, result) => {
         if (error) {
