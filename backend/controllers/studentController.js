@@ -8,20 +8,23 @@ const storage = multer.memoryStorage();
 export const upload = multer({ storage });
 
 // 🔹 Helper to upload buffer to Cloudinary
-const uploadToCloudinary = (file, prefix) => {
+const uploadToCloudinary = (fileBuffer, filename) => {
   return new Promise((resolve, reject) => {
-    // Preserve original extension and add a timestamp to prevent overwrites
-    const originalName = file.originalname || "";
-    const extIndex = originalName.lastIndexOf(".");
-    let ext = extIndex !== -1 ? originalName.substring(extIndex) : "";
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "students", resource_type: "auto", public_id: filename },
+      (error, result) => {
+        if (error) {
+          console.error("❌ Cloudinary error:", error);
+          reject(error);
+        } else {
+          resolve(result.secure_url);
+        }
+      }
+    );
+    stream.end(fileBuffer);
+  });
+};
 
-    // Fallback to mimetype if extension is missing
-    if (!ext && file.mimetype) {
-      if (file.mimetype === "application/pdf") ext = ".pdf";
-      else if (file.mimetype === "image/jpeg") ext = ".jpg";
-      else if (file.mimetype === "image/png") ext = ".png";
-      else if (file.mimetype.startsWith("image/")) ext = ".jpg"; // fallback
-    }
 
     const uniqueFilename = `${prefix}_${Date.now()}${ext}`;
 
