@@ -7,9 +7,9 @@ function Results() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Redirect if not logged in or not a student
-    if (!isLoggedIn() || getUserRole() !== "student") {
-      alert("Only logged-in students can view results.");
+    // Redirect if not logged in or not a student/admin
+    if (!isLoggedIn() || (getUserRole() !== "student" && getUserRole() !== "admin")) {
+      alert("Only logged-in students and admins can view results.");
       window.location.href = "/login";
     } else {
       const fetchResults = async () => {
@@ -37,7 +37,7 @@ function Results() {
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4">Your Complete Report</h2>
+      <h2 className="mb-4">{getUserRole() === "admin" ? "All Students' Results" : "Your Complete Report"}</h2>
       {studentsResults.map((student, idx) => (
         <div className="card p-3 mb-4" key={idx}>
           <h4>{student.studentName || "Student Name"}</h4>

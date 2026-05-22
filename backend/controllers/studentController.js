@@ -8,29 +8,10 @@ const storage = multer.memoryStorage();
 export const upload = multer({ storage });
 
 // 🔹 Helper to upload buffer to Cloudinary
-const uploadToCloudinary = (file, prefix) => {
+const uploadToCloudinary = (fileBuffer, filename) => {
   return new Promise((resolve, reject) => {
-    // Preserve original extension and add a timestamp to prevent overwrites
-    const originalName = file.originalname || "";
-    const extIndex = originalName.lastIndexOf(".");
-    let ext = extIndex !== -1 ? originalName.substring(extIndex) : "";
-
-    // Fallback to mimetype if extension is missing
-    if (!ext && file.mimetype) {
-      if (file.mimetype === "application/pdf") ext = ".pdf";
-      else if (file.mimetype === "image/jpeg") ext = ".jpg";
-      else if (file.mimetype === "image/png") ext = ".png";
-      else if (file.mimetype.startsWith("image/")) ext = ".jpg"; // fallback
-    }
-
-    const uniqueFilename = `${prefix}_${Date.now()}${ext}`;
-
     const stream = cloudinary.uploader.upload_stream(
-      {
-        folder: "students",
-        resource_type: "raw", // "raw" allows PDFs to be accessed properly without Cloudinary image transformations blocking them
-        public_id: uniqueFilename
-      },
+      { folder: "students", resource_type: "auto", public_id: filename },
       (error, result) => {
         if (error) {
           console.error("❌ Cloudinary error:", error);
@@ -40,9 +21,10 @@ const uploadToCloudinary = (file, prefix) => {
         }
       }
     );
-    stream.end(file.buffer);
+    stream.end(fileBuffer);
   });
 };
+
 
 // 🔹 Apply as student (with file uploads)
 export const applyStudent = async (req, res) => {
@@ -57,25 +39,25 @@ export const applyStudent = async (req, res) => {
 
     if (files.aadhaar) {
       documents.aadhaar = await uploadToCloudinary(
-        files.aadhaar[0],
+        files.aadhaar[0].buffer,
         "aadhaar"
       );
     }
     if (files.reportCard) {
       documents.reportCard = await uploadToCloudinary(
-        files.reportCard[0],
+        files.reportCard[0].buffer,
         "reportCard"
       );
     }
     if (files.granthiProof) {
       documents.granthiProof = await uploadToCloudinary(
-        files.granthiProof[0],
+        files.granthiProof[0].buffer,
         "granthiProof"
       );
     }
     if (files.parentAadhaar) {
       documents.parentAadhaar = await uploadToCloudinary(
-        files.parentAadhaar[0],
+        files.parentAadhaar[0].buffer,
         "parentAadhaar"
       );
     }
@@ -102,23 +84,50 @@ export const applyStudent = async (req, res) => {
 // GET: /students/results
 export const getResults = async (req, res) => {
   try {
-    const email = req.user?.email || req.query?.email; // From JWT for student
+    if (req.user?.role === "admin") {
+      const allResults = await Result.find({});
+      
+      const grouped = allResults.reduce((acc, curr) => {
+        const email = curr.studentEmail;
+        if (!acc[email]) {
+          acc[email] = {
+            studentName: curr.studentName || "N/A",
+            email: email,
+            results: []
+          };
+        }
+        acc[email].results.push({
+          exam: curr.exam,
+          score: curr.score,
+          status: curr.status
+        });
+        return acc;
+      }, {});
+      
+      return res.status(200).json(Object.values(grouped));
+    } else {
+      const email = req.user?.email || req.query?.email; // From JWT for student
 
-    // Fetch results for this student
-    const results = await Result.find({ studentEmail: email });
+      // Fetch results for this student
+      const results = await Result.find({ studentEmail: email });
 
-    // Group by student (you can skip this if it's always 1 student)
-    const groupedResults = {
-      studentName: results[0]?.studentName || "N/A",
-      email: email,
-      results: results.map(r => ({
-        exam: r.exam,
-        score: r.score,
-        status: r.status
-      }))
-    };
+      if (!results.length) {
+        return res.status(200).json([]);
+      }
 
-    res.status(200).json([groupedResults]); // return as array for frontend mapping
+      // Group by student (you can skip this if it's always 1 student)
+      const groupedResults = {
+        studentName: results[0]?.studentName || "N/A",
+        email: email,
+        results: results.map(r => ({
+          exam: r.exam,
+          score: r.score,
+          status: r.status
+        }))
+      };
+
+      res.status(200).json([groupedResults]); // return as array for frontend mapping
+    }
   } catch (error) {
     console.error("❌ Error fetching results:", error);
     res.status(500).json({

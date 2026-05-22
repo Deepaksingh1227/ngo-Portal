@@ -9,9 +9,10 @@ function Navbar() {
   const navigate = useNavigate();
 
   const handleLinkClick = () => setIsOpen(false);
-  const handleLogout = () => {
+  const handleLogout = (e) => {
+    e.preventDefault();
     logoutUser();
-    navigate("/login");
+    window.location.href = "/";
   };
 
   const role = getUserRole();
@@ -139,28 +140,32 @@ function Navbar() {
 
 
               {/* Student links */}
-              {isLoggedIn() && role === "student" && (
+              {isLoggedIn() && (role === "student" || role === "admin") && (
                 <>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/apply" onClick={handleLinkClick}>
-                      Apply
-                    </Link>
-                  </li>
+                  {role === "student" && (
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/apply" onClick={handleLinkClick}>
+                        Apply
+                      </Link>
+                    </li>
+                  )}
                   <li className="nav-item">
                     <Link className="nav-link" to="/results" onClick={handleLinkClick}>
                       Results
                     </Link>
                   </li>
                   {/* ✅ Active Students visible for students */}
-                  <li className="nav-item">
-                    <Link
-                      className="nav-link"
-                      to="/active-students"
-                      onClick={handleLinkClick}
-                    >
-                      Active Students
-                    </Link>
-                  </li>
+                  {role === "student" && (
+                    <li className="nav-item">
+                      <Link
+                        className="nav-link"
+                        to="/active-students"
+                        onClick={handleLinkClick}
+                      >
+                        Active Students
+                      </Link>
+                    </li>
+                  )}
                 </>
               )}
 

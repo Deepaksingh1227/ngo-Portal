@@ -1,5 +1,6 @@
 import express from "express";
 import { applyStudent, getResults, upload } from "../controllers/studentController.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -15,6 +16,6 @@ router.post(
   applyStudent
 );
 
-router.get("/results", getResults);
+router.get("/results", protect, getResults);
 
 export default router;
