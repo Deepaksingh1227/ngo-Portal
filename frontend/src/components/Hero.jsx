@@ -1,6 +1,9 @@
 import React from "react";
+import { useLanguage } from "../context/LanguageContext";
 
 function Hero() {
+  const { t } = useLanguage();
+
   return (
     <section className="py-5 bg-light">
       <div className="container text-center">
@@ -12,11 +15,11 @@ function Hero() {
         />
 
         <h1 className="fw-bold mb-3">
-          Sardar Kartar Singh Jhabbar Trust
+          {t("brandName")}
         </h1>
 
         <p className="lead text-muted">
-          Educating the Devout, Empowering the Dedicated — In Spirit, Faith, and Service
+          {t("heroTagline")}
         </p>
       </div>
     </section>

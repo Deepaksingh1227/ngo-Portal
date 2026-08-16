@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { isLoggedIn, getUserRole, getUser, logoutUser } from "../services/Auth";
+import { useLanguage } from "../context/LanguageContext";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { lang, toggleLanguage, t } = useLanguage();
 
   const handleLinkClick = () => setIsOpen(false);
   const handleLogout = (e) => {
@@ -62,7 +64,20 @@ function Navbar() {
   color: #f1c40f !important;
 }
 
-
+        .lang-toggle-btn {
+          background: linear-gradient(135deg, #f1c40f, #e67e22);
+          color: #000;
+          font-weight: 700;
+          border: none;
+          border-radius: 20px;
+          padding: 4px 14px;
+          font-size: 0.85rem;
+          transition: all 0.2s ease;
+        }
+        .lang-toggle-btn:hover {
+          transform: scale(1.05);
+          box-shadow: 0 2px 8px rgba(241, 196, 15, 0.4);
+        }
 
         /* ✅ Mobile tweaks */
         @media (max-width: 768px) {
@@ -104,7 +119,7 @@ function Navbar() {
               className="rounded-circle border border-warning me-2 p-1 bg-white"
             />
             <span className="brand-text text-light">
-              Sardar Kartar Singh Jhabbar Trust
+              {t("brandName")}
             </span>
           </Link>
 
@@ -125,19 +140,22 @@ function Navbar() {
             className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}
             id="navbarNav"
           >
-            <ul className="navbar-nav ms-auto text-center text-lg-start">
+            <ul className="navbar-nav ms-auto text-center text-lg-start align-items-center">
               <li className="nav-item">
                 <Link className="nav-link text-light" to="/" onClick={handleLinkClick}>
-                  Home
+                  {t("home")}
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link text-light" to="/about" onClick={handleLinkClick}>
-                  About
+                  {t("about")}
                 </Link>
               </li>
-
-
+              <li className="nav-item">
+                <Link className="nav-link text-light" to="/student-target" onClick={handleLinkClick}>
+                  {t("students")}
+                </Link>
+              </li>
 
               {/* Student links */}
               {isLoggedIn() && (role === "student" || role === "admin") && (
@@ -145,13 +163,13 @@ function Navbar() {
                   {role === "student" && (
                     <li className="nav-item">
                       <Link className="nav-link" to="/apply" onClick={handleLinkClick}>
-                        Apply
+                        {t("apply")}
                       </Link>
                     </li>
                   )}
                   <li className="nav-item">
                     <Link className="nav-link" to="/results" onClick={handleLinkClick}>
-                      Results
+                      {t("results")}
                     </Link>
                   </li>
                   {/* ✅ Active Students visible for students */}
@@ -162,25 +180,23 @@ function Navbar() {
                         to="/active-students"
                         onClick={handleLinkClick}
                       >
-                        Active Students
+                        {t("activeStudents")}
                       </Link>
                     </li>
                   )}
                 </>
               )}
 
-
-
               <li className="nav-item">
                 <Link className="nav-link text-light" to="/donate" onClick={handleLinkClick}>
-                  Donate
+                  {t("donate")}
                 </Link>
               </li>
 
               {isLoggedIn() && role === "admin" && (
                 <li className="nav-item">
                   <Link className="nav-link text-light" to="/admin" onClick={handleLinkClick}>
-                    Dashboard
+                    {t("dashboard")}
                   </Link>
                 </li>
               )}
@@ -189,12 +205,12 @@ function Navbar() {
                 <>
                   <li className="nav-item">
                     <Link className="nav-link text-light" to="/login" onClick={handleLinkClick}>
-                      Login
+                      {t("login")}
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link className="nav-link text-light" to="/register" onClick={handleLinkClick}>
-                      Register
+                      {t("register")}
                     </Link>
                   </li>
                 </>
@@ -205,16 +221,26 @@ function Navbar() {
                     onClick={handleLogout}
                     className="nav-link text-light logout-link"
                   >
-                    Logout {user?.name ? `(${user.name})` : ""}
+                    {t("logout")} {user?.name ? `(${user.name})` : ""}
                   </Link>
                 </li>
-
               )}
 
               <li className="nav-item">
                 <Link className="nav-link text-light" to="/contact" onClick={handleLinkClick}>
-                  Contact
+                  {t("contact")}
                 </Link>
+              </li>
+
+              {/* Language Switcher Button */}
+              <li className="nav-item ms-lg-2 my-2 my-lg-0">
+                <button
+                  className="lang-toggle-btn"
+                  onClick={toggleLanguage}
+                  title="Switch Language"
+                >
+                  🌐 {t("languageToggle")}
+                </button>
               </li>
             </ul>
           </div>

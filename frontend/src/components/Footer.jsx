@@ -1,16 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 
 function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="footer bg-dark text-light py-4 mt-auto">
       <div className="container text-center">
         <p className="mb-2">
           &copy; {new Date().getFullYear()}{" "}
           <span className="fw-bold text-warning">
-            Sardar Kartar Singh Jhabbar Trust
+            {t("brandName")}
           </span>
-          . All rights reserved.
+          . {t("allRightsReserved")}
         </p>
 
         <ul className="list-inline mb-0">
@@ -24,18 +27,10 @@ function Footer() {
           </li>
           <li className="list-inline-item mx-2">
             <Link
-              to="/active-students"
+              to="/register"
               className="text-light text-decoration-none footer-link"
             >
-              Active Students
-            </Link>
-          </li>
-          <li className="list-inline-item mx-2">
-            <Link
-              to="/results"
-              className="text-light text-decoration-none footer-link"
-            >
-              Results
+              Register
             </Link>
           </li>
         </ul>

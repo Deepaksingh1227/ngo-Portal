@@ -1,7 +1,10 @@
 import React from "react";
 import Hero from "../components/Hero";
+import { useLanguage } from "../context/LanguageContext";
 
 function Home() {
+  const { t } = useLanguage();
+
   return (
     <>
       <Hero />
@@ -10,11 +13,8 @@ function Home() {
       <section className="py-5">
         <div className="container text-center">
           <p className="fs-6 text-muted">
-              Inspired by the sacred life and legacy of <strong>Sardar Kartar Singh Jhabbar Khalsa</strong> — 
-              the saint-soldier who led the Gurdwara Sudhar Lehar and reclaimed the sanctity of Sikh 
-              institutions from Mahants and colonial control — this Trust is founded to keep his 
-              spirit of <strong>sewa, maryada,</strong> and faith-based leadership alive for generations to come.
-            </p>
+            {t("homeIntroText")}
+          </p>
         </div>
       </section>
 
@@ -32,14 +32,12 @@ function Home() {
             </div>
 
             <div className="col-md-6">
-              <h2 className="fw-bold text-primary mb-3">About the Trust</h2>
+              <h2 className="fw-bold text-primary mb-3">{t("aboutTrustTitle")}</h2>
               <p className="text-muted">
-                The Trust supports families devoted to religious service by
-                promoting education, moral discipline, and community leadership.
+                {t("aboutTrustP1")}
               </p>
               <p className="text-muted">
-                Our mission is to help students grow into educated, responsible,
-                and spiritually grounded individuals.
+                {t("aboutTrustP2")}
               </p>
             </div>
           </div>
@@ -49,20 +47,20 @@ function Home() {
       {/* What We Do */}
       <section className="py-5 bg-light">
         <div className="container">
-          <h2 className="text-center fw-bold mb-5">What We Do</h2>
+          <h2 className="text-center fw-bold mb-5">{t("whatWeDoTitle")}</h2>
           <div className="row g-4">
             {[
               {
-                title: "Education Support",
-                text: "Scholarships and academic support for deserving students.",
+                title: t("eduSupportTitle"),
+                text: t("eduSupportText"),
               },
               {
-                title: "Faith & Discipline",
-                text: "Encouraging spiritual growth rooted in Sikh values.",
+                title: t("faithDisciplineTitle"),
+                text: t("faithDisciplineText"),
               },
               {
-                title: "Community Service",
-                text: "Promoting seva, humility, and leadership.",
+                title: t("commServiceTitle"),
+                text: t("commServiceText"),
               },
             ].map((item, i) => (
               <div key={i} className="col-md-4">
@@ -79,30 +77,30 @@ function Home() {
       {/* Core Values */}
       <section className="py-5">
         <div className="container text-center">
-          <h2 className="fw-bold mb-4">Our Core Values</h2>
-          <p className="fs-5 text-muted">Naam • Kirat • Vand Chhakna</p>
+          <h2 className="fw-bold mb-4">{t("coreValuesTitle")}</h2>
+          <p className="fs-5 text-muted">{t("coreValuesSub")}</p>
           <p className="text-muted">
-            True education is the harmony of knowledge, discipline, and faith.
+            {t("coreValuesDesc")}
           </p>
         </div>
       </section>
 
       {/* Call To Action */}
-     <section className="py-5" style={{ backgroundColor: "#f5f5f5ff" }}>
-  <div className="container text-center">
-    <h2 className="fw-bold mb-3 text-dark">Support the Mission</h2>
-    <p className="text-muted mb-4"> 
-      Your contribution helps build a future grounded in values and education.
-    </p>
+      <section className="py-5" style={{ backgroundColor: "#f5f5f5ff" }}>
+        <div className="container text-center">
+          <h2 className="fw-bold mb-3 text-dark">{t("supportMissionTitle")}</h2>
+          <p className="text-muted mb-4">
+            {t("supportMissionText")}
+          </p>
 
-    <a href="/donate" className="btn btn-dark btn-lg me-3">
-      Donate Now
-    </a>
-    <a href="/contact" className="btn btn-outline-dark btn-lg">
-      Contact Us
-    </a>
-  </div>
-</section>
+          <a href="/donate" className="btn btn-dark btn-lg me-3">
+            {t("donateNowBtn")}
+          </a>
+          <a href="/contact" className="btn btn-outline-dark btn-lg">
+            {t("contactUsBtn")}
+          </a>
+        </div>
+      </section>
 
     </>
   );

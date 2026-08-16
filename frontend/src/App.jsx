@@ -12,27 +12,32 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Register from "./pages/Register";
 import Contact from "./pages/Contact";
 import ActiveStudentsList from "./pages/ActiveStudentsList";
+import StudentTargetPage from "./pages/StudentTargetPage";
+import { LanguageProvider } from "./context/LanguageContext";
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <div className="container mt-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/apply" element={<Apply />} />
-          <Route path="/donate" element={<Donate />} />
-          <Route path="/results" element={<Results />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/active-students" element={<ActiveStudentsList />} />
-        </Routes>
-      </div>
-      <Footer />
-    </Router>
+    <LanguageProvider>
+      <Router>
+        <Navbar />
+        <div className="container mt-4">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/apply" element={<Apply />} />
+            <Route path="/donate" element={<Donate />} />
+            <Route path="/results" element={<Results />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/active-students" element={<ActiveStudentsList />} />
+            <Route path="/student-target" element={<StudentTargetPage />} />
+          </Routes>
+        </div>
+        <Footer />
+      </Router>
+    </LanguageProvider>
   );
 }
 
